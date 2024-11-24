@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.send('This is the SmartFarming USSD service.');
+    res.send('This is the AgriConnect USSD service.');
 });
 
 app.post('*', (req, res) => {
@@ -19,7 +19,7 @@ app.post('*', (req, res) => {
 
     // Main Menu
     if (text === "") {
-        response = `CON Welcome to SmartFarming:
+        response = `CON Welcome to AgriConnect:
         1. Subscribe
         2. Access Climate/Weather Data
         3. Link to Buyers
@@ -31,7 +31,7 @@ app.post('*', (req, res) => {
         response = `CON Enter your full name to subscribe:`;
     } else if (text.startsWith("1*")) {
         let name = text.split('*')[1];
-        response = `END Thank you, ${name}. You have successfully subscribed to SmartFarming.`;
+        response = `END Thank you, ${name}. You have successfully subscribed to AgriConnect.`;
     } 
     // Access Climate/Weather Data
     else if (text === "2") {
@@ -56,7 +56,7 @@ app.post('*', (req, res) => {
     } 
     // Exit
     else if (text === "5") {
-        response = `END Thank you for using SmartFarming. Goodbye.`;
+        response = `END Thank you for using AgriConnect. Goodbye.`;
     } 
     // Invalid Input
     else {
