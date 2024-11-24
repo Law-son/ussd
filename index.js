@@ -7,53 +7,60 @@ const PORT = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.send('This is LibertyLink USSD service.');
+    res.send('This is the SmartFarming USSD service.');
 });
 
 app.post('*', (req, res) => {
-    let {sessionId, serviceCode, phoneNumber, text} = req.body;
+    let { sessionId, serviceCode, phoneNumber, text } = req.body;
     let response = '';
 
+    // Main Menu
     if (text === "") {
-        // Main Menu
-        response = `CON Welcome to LibertyLink:
-        1. Log a Complaint
-        2. Speak to a Service Person
-        3. Know Your Rights
-        4. Exit`;
-    } else if (text === '1') {
-        // Log a Complaint
-        response = `CON Please briefly describe the issue:`;
-    } else if (text.startsWith('1*')) {
-        // Confirm complaint submission
-        let complaint = text.split('*')[1];
-        response = `END Your complaint has been logged. Our team will call you shortly.`;
-    } else if (text === '2') {
-        // Speak to a Service Person
-        response = `END Please wait, a service person will call you soon.`;
-    } else if (text === '3') {
-        // Know Your Rights
-        response = `CON Select the right to learn about:
-        1. Right to Education
-        2. Right to Health
-        3. Right to Freedom`;
-    } else if (text === '3*1') {
-        // Summary of Right to Education
-        response = `END The Right to Education ensures access to basic education for everyone.`;
-    } else if (text === '3*2') {
-        // Summary of Right to Health
-        response = `END The Right to Health ensures access to healthcare services for all.`;
-    } else if (text === '3*3') {
-        // Summary of Right to Freedom
-        response = `END The Right to Freedom protects your ability to express yourself and move freely.`;
-    } else if (text === '4') {
-        // Exit
-        response = `END Thank you for using LibertyLink.`;
-    } else {
-        response = 'END Invalid input. Please try again.';
+        response = `CON Welcome to SmartFarming:
+        1. Subscribe
+        2. Access Climate/Weather Data
+        3. Link to Buyers
+        4. Trade Seeds
+        5. Exit`;
+    } 
+    // Subscription
+    else if (text === "1") {
+        response = `CON Enter your full name to subscribe:`;
+    } else if (text.startsWith("1*")) {
+        let name = text.split('*')[1];
+        response = `END Thank you, ${name}. You have successfully subscribed to SmartFarming.`;
+    } 
+    // Access Climate/Weather Data
+    else if (text === "2") {
+        response = `CON Select crop type:
+        1. Maize
+        2. Rice
+        3. Cassava`;
+    } else if (text === "2*1") {
+        response = `END Current weather data suggests planting drought-resistant maize for better yield.`;
+    } else if (text === "2*2") {
+        response = `END Climate conditions are favorable for planting early-maturing rice.`;
+    } else if (text === "2*3") {
+        response = `END Cassava is highly resilient in this season. Suitable for planting now.`;
+    } 
+    // Link to Buyers
+    else if (text === "3") {
+        response = `END We are connecting you to potential buyers. Expect a call from our team shortly.`;
+    } 
+    // Trade Seeds
+    else if (text === "4") {
+        response = `END To trade seeds, please contact our support team. We will reach out to you shortly.`;
+    } 
+    // Exit
+    else if (text === "5") {
+        response = `END Thank you for using SmartFarming. Goodbye.`;
+    } 
+    // Invalid Input
+    else {
+        response = `END Invalid input. Please try again.`;
     }
 
     res.send(response);
